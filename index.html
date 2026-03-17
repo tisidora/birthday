@@ -4,18 +4,239 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-<title>Pozivnica</title>
+<title>Rođendanska pozivnica</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Jost:wght@300;400&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@1&family=Jost:wght@300;400&display=swap" rel="stylesheet">
 
 <style>
 
 /* ================= GLOBAL ================= */
+
 body{
-  margin:0;
-  font-family:'Jost',sans-serif;
+margin:0;
+font-family:'Jost',sans-serif;
+color:#fff;
+overflow-x:hidden;
+background:#0e0e0e; /* Duboka tamna pozadina */
+}
 
+/* ================= NOVI FLOWER SHADOW BACKGROUND ================= */
 
+.bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    overflow: hidden;
+    background: #0e0e0e;
+}
+
+/* Sloj sa senkom biljke */
+.flower-shadow {
+    position: absolute;
+    width: 140%;
+    height: 140%;
+    top: -20%;
+    left: -20%;
+    /* Koristimo sliku grane sa Unsplash-a i pretvaramo je u senku pomoću filtera */
+    background: url("https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2000&auto=format&fit=crop") no-repeat center/cover;
+    opacity: 0.12; /* Suptilna vidljivost */
+    filter: grayscale(100%) brightness(0) blur(5px); /* Pretvara sliku u crnu senku */
+    animation: sway 10s ease-in-out infinite;
+    transform-origin: bottom right;
+}
+
+/* Gradijent koji omekšava ivice senke */
+.bg-overlay {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(circle at 30% 30%, transparent 0%, #0e0e0e 85%);
+}
+
+@keyframes sway {
+    0%, 100% { transform: rotate(-1deg) scale(1.05); }
+    50% { transform: rotate(1.5deg) scale(1); }
+}
+
+/* ================= SECTIONS ================= */
+
+section{
+padding:120px 20px;
+text-align:center;
+max-width:900px;
+margin:auto;
+position: relative;
+z-index: 1;
+}
+
+/* ================= HERO ================= */
+
+.monogram{
+font-size:90px;
+font-family:'Cormorant Garamond',serif;
+letter-spacing:20px;
+margin-bottom:20px;
+}
+
+.hero p{
+letter-spacing:3px;
+opacity:.8;
+}
+
+/* ================= TIMELINE ================= */
+
+.timeline{
+display:flex;
+flex-direction:column;
+gap:20px;
+margin-top:40px;
+}
+
+.time-item{
+border:1px solid rgba(255,255,255,.1);
+padding:20px;
+border-radius:10px;
+backdrop-filter:blur(8px);
+background: rgba(255,255,255,0.02);
+}
+
+/* ================= GALLERY ================= */
+
+.gallery{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+gap:15px;
+}
+
+.gallery img{
+width:100%;
+height:260px;
+object-fit:cover;
+border-radius:10px;
+transition:.3s;
+opacity: 0.9;
+}
+
+.gallery img:hover{
+transform:scale(1.05);
+opacity: 1;
+}
+
+/* ================= ABOUT ================= */
+
+.about{
+max-width:600px;
+margin:auto;
+line-height:1.6;
+opacity:.9;
+}
+
+/* ================= LOCATION ================= */
+
+iframe{
+width:100%;
+height:350px;
+border:0;
+border-radius:10px;
+filter: invert(90%) hue-rotate(180deg); /* Tamna mapa da se slaže uz stil */
+}
+
+/* ================= RSVP ================= */
+
+.rsvp-form{
+display:flex;
+flex-direction:column;
+gap:15px;
+margin-top:30px;
+}
+
+.rsvp-form input,
+.rsvp-form select{
+padding:14px;
+border-radius:6px;
+border: 1px solid rgba(255,255,255,0.2);
+background: rgba(0,0,0,0.3);
+color: #fff;
+}
+
+.rsvp-form button{
+padding:16px;
+background:#f5c96a;
+border:none;
+border-radius:6px;
+cursor:pointer;
+font-weight:bold;
+text-transform: uppercase;
+letter-spacing: 2px;
+transition: 0.3s;
+}
+
+.rsvp-form button:hover {
+    background: #e4b859;
+    transform: translateY(-2px);
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="bg">
+    <div class="flower-shadow"></div>
+    <div class="bg-overlay"></div>
+</div>
+
+<section class="hero">
+<div class="monogram">A M</div>
+<h1>Ana's Birthday</h1>
+<p>12. jul 2026 · Beograd</p>
+</section>
+
+<section>
+<h2>Detalji i satnica</h2>
+<div class="timeline">
+<div class="time-item">18:00 – Dolazak gostiju</div>
+<div class="time-item">19:00 – Piće dobrodošlice</div>
+<div class="time-item">20:00 – Večera</div>
+<div class="time-item">22:00 – Torta</div>
+<div class="time-item">23:00 – Žurka 🎉</div>
+</div>
+</section>
+
+<section>
+<h2>Galerija</h2>
+<div class="gallery">
+<img src="images/img1.jpg">
+<img src="images/img2.jpg">
+<img src="images/img3.jpg">
+<img src="images/img4.jpg">
+</div>
+</section>
+
+<section>
+<h2>O slavljeniku</h2>
+<div class="about">
+Ana voli putovanja, muziku i dobre žurke.  
+Ove godine želi da proslavi rođendan sa najbližima i napravi veče za pamćenje.
+</div>
+</section>
+
+<section>
+<h2>Lokacija</h2>
+<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2830.2!2d20.45!3d44.81!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDTCsDQ4JzM2LjAiTiAyMMKwMjcnMDAuMCJF!5e0!3m2!1ssr!2srs!4v1625000000000!5m2!1ssr!2srs"></iframe>
+</section>
+
+<section>
+<h2>Potvrda dolaska</h2>
+<form class="rsvp-form">
+<input type="text" placeholder="Ime i prezime" required>
+<select required>
+<option value="" disabled selected>Dolazak</option>
+<option value="Dolazim">Dolazim</option>
+<option value="Ne dolazim">Ne dolazim</option>
+</select>
+<input type="number" placeholder="Broj osoba" min="1">
+<button type="submit">Pošalji</button>
+</form>
 </section>
 
 </body>
