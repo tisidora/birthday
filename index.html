@@ -3,206 +3,473 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Rođendanska pozivnica</title>
-
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital@1&family=Jost:wght@300;400&display=swap" rel="stylesheet">
-
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Jost:wght@200;300;400&display=swap" rel="stylesheet">
 <style>
 
-/* ================= GLOBAL ================= */
-
-body{
-margin:0;
-font-family:'Jost',sans-serif;
-color:#fff;
-overflow-x:hidden;
-background:#121212; /* Tamno siva podloga da bi se senka videla */
+:root {
+  --cream: #f5f0e8;
+  --ink:   #1a1610;
+  --gold:  #c9a84c;
 }
 
-/* ================= ANIMIRANA SENKA CVETA ================= */
+* { margin:0; padding:0; box-sizing:border-box; }
 
-.bg-container {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    background: #121212;
-    overflow: hidden;
+body {
+  font-family: 'Jost', sans-serif;
+  font-weight: 300;
+  color: var(--ink);
+  background: var(--cream);
+  overflow-x: hidden;
 }
 
-.flower-shadow {
-    position: absolute;
-    width: 100%;
-    height: 100%;
-    /* Koristimo jasnu PNG senku biljke */
-    background: url("https://www.transparentpng.com/download/shadow/shadow-transparent-background-5.png") no-repeat center/cover;
-    opacity: 0.3; /* Podešavaš koliko je senka jaka */
-    filter: brightness(0); /* Pravimo je skroz crnom */
-    animation: wind 12s ease-in-out infinite;
-    transform-origin: bottom left;
+/* ── GRAIN ── */
+body::before {
+  content:'';
+  position:fixed; inset:0; z-index:10;
+  pointer-events:none; opacity:0.04;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  background-size:180px;
 }
 
-@keyframes wind {
-    0%, 100% { transform: scale(1.2) rotate(-5deg) translateX(0); }
-    50% { transform: scale(1.25) rotate(2deg) translateX(20px); }
+/* ── SHADOW STAGE ── */
+.shadow-stage {
+  position:fixed; inset:0; z-index:0;
+  pointer-events:none; overflow:hidden;
 }
 
-/* ================= SECTIONS ================= */
-
-section{
-padding:100px 20px;
-text-align:center;
-max-width:800px;
-margin:auto;
-position: relative;
+.fw {
+  position:absolute; bottom:0;
+  transform-origin:bottom center;
+  filter:blur(2px);
 }
 
-/* ================= HERO & MONOGRAM ================= */
+.fw.p1  { left:-3%;  animation:sa 9s  ease-in-out infinite; }
+.fw.p2  { left:9%;   animation:sb 11s ease-in-out infinite 1.2s; }
+.fw.p3  { left:20%;  animation:sa 13s ease-in-out infinite 0.4s; }
+.fw.p4  { left:33%;  animation:sc 10s ease-in-out infinite 2s; }
+.fw.p5  { left:48%;  animation:sb 12s ease-in-out infinite 0.8s; }
+.fw.p6  { left:61%;  animation:sa 9.5s ease-in-out infinite 1.8s; }
+.fw.p7  { left:74%;  animation:sc 11.5s ease-in-out infinite 0.3s; }
+.fw.p8  { left:87%;  animation:sb 10.5s ease-in-out infinite 2.5s; }
+.fw.p9  { left:97%;  animation:sa 8.5s ease-in-out infinite 0.9s; }
 
-.monogram{
-font-size:80px;
-font-family:'Cormorant Garamond',serif;
-letter-spacing:15px;
-margin-bottom:10px;
-color: #f5c96a;
+.far  { opacity:0.06; }
+.mid  { opacity:0.10; }
+.near { opacity:0.15; }
+
+@keyframes sa {
+  0%,100% { transform:rotate(-6deg); }
+  50%      { transform:rotate(5deg) translateX(6px); }
+}
+@keyframes sb {
+  0%,100% { transform:rotate(4deg); }
+  50%      { transform:rotate(-7deg) translateX(-8px); }
+}
+@keyframes sc {
+  0%,100% { transform:rotate(-3deg); }
+  35%      { transform:rotate(7deg) translateX(10px); }
+  70%      { transform:rotate(-5deg); }
 }
 
-/* ================= TIMELINE ================= */
+/* ── CONTENT ── */
+.content { position:relative; z-index:2; }
 
-.time-item{
-border: 1px solid rgba(255,255,255,0.1);
-padding: 25px;
-margin-bottom: 15px;
-border-radius: 15px;
-background: rgba(255,255,255,0.03);
-backdrop-filter: blur(5px);
+section {
+  padding:110px 24px;
+  text-align:center;
+  max-width:680px;
+  margin:auto;
 }
 
-/* ================= GALLERY ================= */
+.hero { padding-top:150px; padding-bottom:90px; }
 
-.gallery{
-display:grid;
-grid-template-columns: repeat(2, 1fr);
-gap:10px;
+.monogram {
+  font-family:'Cormorant Garamond',serif;
+  font-weight:300;
+  font-size:90px;
+  letter-spacing:24px;
+  color:var(--ink);
+  line-height:1;
+  margin-bottom:30px;
 }
 
-.gallery img{
-width:100%;
-height:200px;
-object-fit:cover;
-border-radius:10px;
+.hero h1 {
+  font-family:'Cormorant Garamond',serif;
+  font-weight:300; font-style:italic;
+  font-size:38px; letter-spacing:4px;
+  color:var(--ink); margin-bottom:16px;
 }
 
-/* ================= MAPA (VRAĆENA) ================= */
-
-.map-container {
-    width: 100%;
-    height: 300px;
-    border-radius: 15px;
-    overflow: hidden;
-    margin-top: 20px;
+.hero-date {
+  font-family:'Jost',sans-serif;
+  font-weight:200; font-size:11px;
+  letter-spacing:7px; text-transform:uppercase;
+  color:var(--gold);
 }
 
+.divider {
+  width:1px; height:64px;
+  background:linear-gradient(to bottom, transparent, var(--gold), transparent);
+  margin:0 auto 30px;
+}
+
+h2 {
+  font-family:'Cormorant Garamond',serif;
+  font-weight:300; font-style:italic;
+  font-size:30px; letter-spacing:3px;
+  color:var(--ink); margin-bottom:40px;
+}
+
+.section-label {
+  font-family:'Jost',sans-serif;
+  font-weight:200; font-size:10px;
+  letter-spacing:8px; text-transform:uppercase;
+  color:var(--gold); margin-bottom:12px;
+  display:block;
+}
+
+/* ── TIMELINE ── */
+.timeline {
+  border-left:1px solid rgba(26,22,16,0.12);
+  margin-left:20px; padding-left:32px;
+  text-align:left;
+}
+
+.time-item {
+  padding:18px 0;
+  border-bottom:1px solid rgba(26,22,16,0.06);
+  position:relative;
+}
+
+.time-item::before {
+  content:''; position:absolute;
+  left:-37px; top:50%; transform:translateY(-50%);
+  width:9px; height:9px; border-radius:50%;
+  border:1px solid var(--gold); background:var(--cream);
+}
+
+.time-item .t {
+  font-family:'Cormorant Garamond',serif;
+  font-weight:300; font-size:22px;
+  color:var(--gold); letter-spacing:2px;
+}
+
+.time-item .l {
+  font-family:'Jost',sans-serif;
+  font-weight:200; font-size:12px;
+  letter-spacing:4px; text-transform:uppercase;
+  color:var(--ink); opacity:0.65; margin-top:2px;
+}
+
+/* ── GALLERY ── */
+.gallery {
+  display:grid;
+  grid-template-columns:1.3fr 1fr;
+  grid-template-rows:auto auto;
+  gap:8px;
+}
+.gallery img { width:100%; object-fit:cover; display:block; }
+.gallery img:first-child { height:280px; grid-row:1/3; }
+.gallery img:not(:first-child) { height:136px; }
+
+/* ── MAP ── */
+.map-wrap {
+  width:100%; height:280px;
+  overflow:hidden; margin-top:20px;
+}
 iframe {
-    width: 100%;
-    height: 100%;
-    border: 0;
-    filter: invert(90%) hue-rotate(180deg) opacity(0.6);
+  width:100%; height:100%; border:0;
+  filter:sepia(40%) contrast(0.9) brightness(1.05) opacity(0.85);
 }
 
-/* ================= RSVP ================= */
-
-.rsvp-form{
-display:flex;
-flex-direction:column;
-gap:15px;
+/* ── RSVP ── */
+.rsvp-form {
+  display:flex; flex-direction:column;
+  gap:10px; max-width:420px; margin:0 auto;
 }
 
-.rsvp-form input, .rsvp-form select{
-padding:15px;
-background: rgba(255,255,255,0.05);
-border: 1px solid rgba(255,255,255,0.2);
-color: white;
-border-radius: 8px;
+.rsvp-form input,
+.rsvp-form select {
+  padding:16px 20px;
+  background:transparent; border:none;
+  border-bottom:1px solid rgba(26,22,16,0.2);
+  color:var(--ink);
+  font-family:'Jost',sans-serif;
+  font-weight:200; font-size:12px;
+  letter-spacing:3px; outline:none;
+  -webkit-appearance:none; appearance:none;
+  transition:border-color .3s;
 }
 
-.rsvp-form button{
-padding:18px;
-background:#f5c96a;
-border:none;
-font-weight:bold;
-letter-spacing: 2px;
-cursor:pointer;
-border-radius: 8px;
+.rsvp-form input::placeholder { color:rgba(26,22,16,0.35); text-transform:uppercase; }
+.rsvp-form input:focus,
+.rsvp-form select:focus { border-bottom-color:var(--gold); }
+.rsvp-form select option { background:var(--cream); }
+
+.rsvp-form button {
+  margin-top:22px; padding:16px 0;
+  background:transparent;
+  border:1px solid var(--ink);
+  color:var(--ink);
+  font-family:'Jost',sans-serif;
+  font-weight:300; font-size:10px;
+  letter-spacing:7px; text-transform:uppercase;
+  cursor:pointer; transition:background .35s, color .35s;
 }
+.rsvp-form button:hover { background:var(--ink); color:var(--cream); }
 
-/* ================= FOOTER MONOGRAM ================= */
-
-.footer-monogram {
-    padding: 60px 0;
-    font-size: 50px;
-    font-family: 'Cormorant Garamond', serif;
-    opacity: 0.4;
-    letter-spacing: 10px;
+/* ── FOOTER ── */
+.footer-mono {
+  padding:80px 0 100px;
+  font-family:'Cormorant Garamond',serif;
+  font-weight:300; font-style:italic;
+  font-size:52px; letter-spacing:18px;
+  opacity:0.18; color:var(--ink);
+  text-align:center;
 }
 
 </style>
 </head>
-
 <body>
 
-<div class="bg-container">
-    <div class="flower-shadow"></div>
-</div>
+<!-- ══════════════ BOTANICAL SHADOW BACKGROUND ══════════════
+     Elegant botanical silhouettes drawn with bezier curves —
+     each petal is a proper curved path, not a rotated ellipse.
+     Three flower types: poppy, cosmos, tulip.
+     Three depth layers: far/mid/near.
+════════════════════════════════════════════════════════ -->
+<div class="shadow-stage">
 
-<section>
-    <div class="monogram">A M</div>
+  <!-- ─ POPPY helper (reusable via <use>) ─ -->
+  <svg width="0" height="0" style="position:absolute">
+    <defs>
+      <!-- Poppy: 4 wide ruffled petals -->
+      <g id="poppy">
+        <path d="M0,0 C-8,-18 -22,-38 -14,-58 C-6,-74 6,-74 14,-58 C22,-38 8,-18 0,0Z" fill="#1a1610"/>
+        <path d="M0,0 C18,-8 38,-22 58,-14 C74,-6 74,6 58,14 C38,22 18,8 0,0Z" fill="#1a1610"/>
+        <path d="M0,0 C8,18 22,38 14,58 C6,74 -6,74 -14,58 C-22,38 -8,18 0,0Z" fill="#1a1610"/>
+        <path d="M0,0 C-18,8 -38,22 -58,14 C-74,6 -74,-6 -58,-14 C-38,-22 -18,-8 0,0Z" fill="#1a1610"/>
+        <circle cx="0" cy="0" r="10" fill="#1a1610"/>
+      </g>
+      <!-- Cosmos: 8 narrow pointed petals with notch tip -->
+      <g id="cosmos">
+        <path d="M0,0 C-5,-14 -4,-34 0,-52 C4,-34 5,-14 0,0Z" fill="#1a1610" transform="rotate(0)"/>
+        <path d="M0,0 C-5,-14 -4,-34 0,-52 C4,-34 5,-14 0,0Z" fill="#1a1610" transform="rotate(45)"/>
+        <path d="M0,0 C-5,-14 -4,-34 0,-52 C4,-34 5,-14 0,0Z" fill="#1a1610" transform="rotate(90)"/>
+        <path d="M0,0 C-5,-14 -4,-34 0,-52 C4,-34 5,-14 0,0Z" fill="#1a1610" transform="rotate(135)"/>
+        <path d="M0,0 C-5,-14 -4,-34 0,-52 C4,-34 5,-14 0,0Z" fill="#1a1610" transform="rotate(180)"/>
+        <path d="M0,0 C-5,-14 -4,-34 0,-52 C4,-34 5,-14 0,0Z" fill="#1a1610" transform="rotate(225)"/>
+        <path d="M0,0 C-5,-14 -4,-34 0,-52 C4,-34 5,-14 0,0Z" fill="#1a1610" transform="rotate(270)"/>
+        <path d="M0,0 C-5,-14 -4,-34 0,-52 C4,-34 5,-14 0,0Z" fill="#1a1610" transform="rotate(315)"/>
+        <circle cx="0" cy="0" r="7" fill="#1a1610"/>
+      </g>
+      <!-- Tulip: cupped teardrop bud shape -->
+      <g id="tulip">
+        <!-- outer petals -->
+        <path d="M0,0 C-12,-10 -18,-30 -10,-52 C-4,-66 4,-66 10,-52 C18,-30 12,-10 0,0Z" fill="#1a1610"/>
+        <path d="M0,0 C12,-6 30,-10 44,-2 C56,6 52,18 38,20 C22,22 8,10 0,0Z" fill="#1a1610"/>
+        <path d="M0,0 C-12,-6 -30,-10 -44,-2 C-56,6 -52,18 -38,20 C-22,22 -8,10 0,0Z" fill="#1a1610"/>
+        <!-- inner petal -->
+        <path d="M0,0 C-7,-8 -10,-22 -4,-38 C-1,-46 1,-46 4,-38 C10,-22 7,-8 0,0Z" fill="#1a1610"/>
+      </g>
+      <!-- Leaf: slim elegant curved blade -->
+      <g id="leaf-l">
+        <path d="M0,0 C-8,-12 -18,-28 -12,-46 C-6,-58 2,-52 4,-38 C8,-22 4,-8 0,0Z" fill="#1a1610"/>
+      </g>
+      <g id="leaf-r">
+        <path d="M0,0 C8,-12 18,-28 12,-46 C6,-58 -2,-52 -4,-38 C-8,-22 -4,-8 0,0Z" fill="#1a1610"/>
+      </g>
+    </defs>
+  </svg>
+
+  <!-- ════ FAR depth ════ -->
+
+  <!-- FAR 1 — tall poppy, left edge -->
+  <div class="fw p2 far">
+    <svg width="120" height="800" viewBox="0 0 120 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <!-- stem: gentle S-curve -->
+      <path d="M60 800 C58 720 64 640 60 540 C56 450 62 360 60 270 C58 210 62 170 60 130" stroke="#1a1610" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <!-- leaves -->
+      <g transform="translate(60,560) rotate(-15)"><use href="#leaf-l"/></g>
+      <g transform="translate(60,620) rotate(18)"><use href="#leaf-r"/></g>
+      <g transform="translate(60,460) rotate(-20)"><use href="#leaf-l"/></g>
+      <!-- flower -->
+      <g transform="translate(60,70) scale(0.85)"><use href="#poppy"/></g>
+    </svg>
+  </div>
+
+  <!-- FAR 2 — cosmos, right-center -->
+  <div class="fw p5 far">
+    <svg width="100" height="760" viewBox="0 0 100 760" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M50 760 C48 685 53 605 50 510 C47 425 52 340 50 255 C48 195 52 155 50 115" stroke="#1a1610" stroke-width="2.2" stroke-linecap="round" fill="none"/>
+      <!-- branching side stem with small bud -->
+      <path d="M50 380 C62 358 70 330 66 308" stroke="#1a1610" stroke-width="1.8" stroke-linecap="round" fill="none"/>
+      <g transform="translate(66,290) scale(0.5)"><use href="#cosmos"/></g>
+      <!-- leaves -->
+      <g transform="translate(50,530) rotate(-22)"><use href="#leaf-l"/></g>
+      <g transform="translate(50,590) rotate(20)"><use href="#leaf-r"/></g>
+      <!-- flower -->
+      <g transform="translate(50,65) scale(0.78)"><use href="#cosmos"/></g>
+    </svg>
+  </div>
+
+  <!-- FAR 3 — tulip, far right -->
+  <div class="fw p8 far">
+    <svg width="110" height="780" viewBox="0 0 110 780" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M55 780 C53 700 58 615 55 515 C52 430 56 345 54 258 C52 196 56 154 55 118" stroke="#1a1610" stroke-width="2.4" stroke-linecap="round" fill="none"/>
+      <g transform="translate(55,555) rotate(-18)"><use href="#leaf-l"/></g>
+      <g transform="translate(55,625) rotate(16)"><use href="#leaf-r"/></g>
+      <g transform="translate(55,460) rotate(-12)"><use href="#leaf-l"/></g>
+      <g transform="translate(55,72) scale(0.9)"><use href="#tulip"/></g>
+    </svg>
+  </div>
+
+  <!-- ════ MID depth ════ -->
+
+  <!-- MID 1 — poppy, far left -->
+  <div class="fw p1 mid">
+    <svg width="130" height="820" viewBox="0 0 130 820" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M65 820 C63 738 68 650 64 545 C60 450 65 360 63 268 C61 204 65 162 64 122" stroke="#1a1610" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+      <g transform="translate(64,572) rotate(-20)"><use href="#leaf-l"/></g>
+      <g transform="translate(64,638) rotate(22)"><use href="#leaf-r"/></g>
+      <g transform="translate(64,480) rotate(-14)"><use href="#leaf-l"/></g>
+      <g transform="translate(64,390) rotate(18)"><use href="#leaf-r"/></g>
+      <g transform="translate(64,68)"><use href="#poppy"/></g>
+    </svg>
+  </div>
+
+  <!-- MID 2 — cosmos with branch, left-center -->
+  <div class="fw p4 mid">
+    <svg width="140" height="840" viewBox="0 0 140 840" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M70 840 C68 756 73 665 69 558 C65 464 70 372 68 278 C66 212 70 168 69 128" stroke="#1a1610" stroke-width="2.6" stroke-linecap="round" fill="none"/>
+      <!-- elegant branching arc -->
+      <path d="M69 400 C84 374 96 342 90 312" stroke="#1a1610" stroke-width="1.9" stroke-linecap="round" fill="none"/>
+      <g transform="translate(90,294) scale(0.62)"><use href="#cosmos"/></g>
+      <g transform="translate(69,580) rotate(-24)"><use href="#leaf-l"/></g>
+      <g transform="translate(69,648) rotate(20)"><use href="#leaf-r"/></g>
+      <g transform="translate(69,490) rotate(-16)"><use href="#leaf-l"/></g>
+      <g transform="translate(69,74) scale(0.95)"><use href="#cosmos"/></g>
+    </svg>
+  </div>
+
+  <!-- MID 3 — tulip, right side -->
+  <div class="fw p7 mid">
+    <svg width="120" height="810" viewBox="0 0 120 810" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M60 810 C58 730 63 645 60 542 C57 450 61 360 59 270 C57 206 61 164 60 124" stroke="#1a1610" stroke-width="2.5" stroke-linecap="round" fill="none"/>
+      <g transform="translate(60,562) rotate(-16)"><use href="#leaf-l"/></g>
+      <g transform="translate(60,632) rotate(18)"><use href="#leaf-r"/></g>
+      <g transform="translate(60,472) rotate(-20)"><use href="#leaf-l"/></g>
+      <g transform="translate(60,70) scale(0.92)"><use href="#tulip"/></g>
+    </svg>
+  </div>
+
+  <!-- ════ NEAR depth (most opaque) ════ -->
+
+  <!-- NEAR 1 — large poppy, left -->
+  <div class="fw p3 near">
+    <svg width="150" height="860" viewBox="0 0 150 860" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M75 860 C73 774 78 682 74 572 C70 474 75 380 73 284 C71 216 75 172 74 130" stroke="#1a1610" stroke-width="3" stroke-linecap="round" fill="none"/>
+      <!-- second branch for depth -->
+      <path d="M74 460 C56 432 44 400 50 372" stroke="#1a1610" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <g transform="translate(50,354) scale(0.55)"><use href="#poppy"/></g>
+      <g transform="translate(74,592) rotate(-22)"><use href="#leaf-l"/></g>
+      <g transform="translate(74,662) rotate(24)"><use href="#leaf-r"/></g>
+      <g transform="translate(74,498) rotate(-18)"><use href="#leaf-l"/></g>
+      <g transform="translate(74,410) rotate(14)"><use href="#leaf-r"/></g>
+      <g transform="translate(74,72) scale(1.05)"><use href="#poppy"/></g>
+    </svg>
+  </div>
+
+  <!-- NEAR 2 — cosmos, right-center -->
+  <div class="fw p6 near">
+    <svg width="135" height="845" viewBox="0 0 135 845" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M67 845 C65 762 70 672 67 565 C64 470 68 378 66 284 C64 218 68 174 67 132" stroke="#1a1610" stroke-width="2.8" stroke-linecap="round" fill="none"/>
+      <path d="M67 408 C82 380 92 348 88 318" stroke="#1a1610" stroke-width="2" stroke-linecap="round" fill="none"/>
+      <g transform="translate(88,300) scale(0.58)"><use href="#cosmos"/></g>
+      <g transform="translate(67,585) rotate(-20)"><use href="#leaf-l"/></g>
+      <g transform="translate(67,658) rotate(22)"><use href="#leaf-r"/></g>
+      <g transform="translate(67,495) rotate(-15)"><use href="#leaf-l"/></g>
+      <g transform="translate(67,70) scale(0.98)"><use href="#cosmos"/></g>
+    </svg>
+  </div>
+
+  <!-- NEAR 3 — tall tulip, far right -->
+  <div class="fw p9 near">
+    <svg width="125" height="830" viewBox="0 0 125 830" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path d="M62 830 C60 748 65 660 62 554 C59 460 63 368 61 275 C59 210 63 166 62 126" stroke="#1a1610" stroke-width="2.7" stroke-linecap="round" fill="none"/>
+      <g transform="translate(62,574) rotate(-18)"><use href="#leaf-l"/></g>
+      <g transform="translate(62,644) rotate(20)"><use href="#leaf-r"/></g>
+      <g transform="translate(62,480) rotate(-22)"><use href="#leaf-l"/></g>
+      <g transform="translate(62,74) scale(0.96)"><use href="#tulip"/></g>
+    </svg>
+  </div>
+
+</div><!-- /shadow-stage -->
+
+<!-- ══════════════════════ CONTENT ══════════════════════ -->
+<div class="content">
+
+  <section class="hero">
+    <div class="monogram">A &thinsp; M</div>
+    <div class="divider"></div>
     <h1>Ana's Birthday</h1>
-    <p>12. jul 2026 · Beograd</p>
-</section>
+    <p class="hero-date">12. jul 2026 &nbsp;·&nbsp; Beograd</p>
+  </section>
 
-<section>
+  <section>
+    <span class="section-label">Program večeri</span>
     <h2>Satnica</h2>
-    <div class="time-item">18:00 – Dolazak</div>
-    <div class="time-item">20:00 – Večera</div>
-    <div class="time-item">22:00 – Party 🎉</div>
-</section>
+    <div class="timeline">
+      <div class="time-item">
+        <div class="t">18:00</div>
+        <div class="l">Dolazak</div>
+      </div>
+      <div class="time-item">
+        <div class="t">20:00</div>
+        <div class="l">Večera</div>
+      </div>
+      <div class="time-item">
+        <div class="t">22:00</div>
+        <div class="l">Proslava</div>
+      </div>
+    </div>
+  </section>
 
-<section>
+  <section>
+    <span class="section-label">Trenuci</span>
     <h2>Galerija</h2>
     <div class="gallery">
-        <img src="https://images.unsplash.com/photo-1530103043960-ef38714abb15?auto=format&fit=crop&w=500">
-        <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=500">
+      <img src="https://images.unsplash.com/photo-1530103043960-ef38714abb15?auto=format&fit=crop&w=600">
+      <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=400">
+      <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=400">
     </div>
-</section>
+  </section>
 
-<section>
+  <section>
+    <span class="section-label">Gde nas naći</span>
     <h2>Lokacija</h2>
-    <div class="map-container">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2830.2031750567!2d20.457273!3d44.812544!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDTCsDQ4JzQ1LjIiTiAyMMKwMjcnMjYuMiJF!5e0!3m2!1ssr!2srs!4v1620000000000"></iframe>
+    <div class="map-wrap">
+      <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2830.2031750567!2d20.457273!3d44.812544!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDTCsDQ4JzQ1LjIiTiAyMMKwMjcnMjYuMiJF!5e0!3m2!1ssr!2srs!4v1620000000000"></iframe>
     </div>
-</section>
+  </section>
 
-<section>
+  <section>
+    <span class="section-label">Tvoj odgovor</span>
     <h2>Potvrda dolaska</h2>
     <form class="rsvp-form">
-        <input type="text" placeholder="Ime i prezime" required>
-        <select required>
-            <option value="" disabled selected>Dolazak</option>
-            <option value="Dolazim">Dolazim</option>
-            <option value="Ne dolazim">Ne dolazim</option>
-        </select>
-        <button type="submit">POŠALJI</button>
+      <input type="text" placeholder="Ime i prezime" required>
+      <select required>
+        <option value="" disabled selected>— Dolazak —</option>
+        <option value="Dolazim">Dolazim</option>
+        <option value="Ne dolazim">Ne dolazim</option>
+      </select>
+      <button type="submit">Potvrdi</button>
     </form>
-</section>
+  </section>
 
-<section class="footer-monogram">
-    A M
-</section>
+  <div class="footer-mono">A &thinsp; M</div>
 
-</body>
-</html>
-</section>
-
+</div>
 </body>
 </html>
