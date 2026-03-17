@@ -17,44 +17,44 @@ margin:0;
 font-family:'Jost',sans-serif;
 color:#fff;
 overflow-x:hidden;
-background:#0e0e0e; /* Duboka tamna pozadina */
+background:#0e0e0e; /* Duboka tamna osnova */
 }
 
-/* ================= NOVI FLOWER SHADOW BACKGROUND ================= */
+/* ================= VRÁĆENA I POBOLJŠANA ANIMIRANA CVETNA POZADINA ================= */
 
-.bg {
-    position: fixed;
-    inset: 0;
-    z-index: -1;
-    overflow: hidden;
-    background: #0e0e0e;
+.bg{
+position:fixed;
+inset:0;
+z-index:-1;
+overflow:hidden;
 }
 
-/* Sloj sa senkom biljke */
-.flower-shadow {
-    position: absolute;
-    width: 140%;
-    height: 140%;
-    top: -20%;
-    left: -20%;
-    /* Koristimo sliku grane sa Unsplash-a i pretvaramo je u senku pomoću filtera */
-    background: url("https://images.unsplash.com/photo-1518531933037-91b2f5f229cc?q=80&w=2000&auto=format&fit=crop") no-repeat center/cover;
-    opacity: 0.12; /* Suptilna vidljivost */
-    filter: grayscale(100%) brightness(0) blur(5px); /* Pretvara sliku u crnu senku */
-    animation: sway 10s ease-in-out infinite;
-    transform-origin: bottom right;
+.bg::before,
+.bg::after{
+content:"";
+position:absolute;
+width:200%;
+height:200%;
+/* Vraćamo tvoju prelepu cvetnu sliku */
+background:url("https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9") no-repeat center/cover;
+opacity:0.18; /* Malo vidljivije nego pre */
+filter:blur(10px) grayscale(20%); /* Magličasti, suptilniji efekat *//* Dodajemo grayscale da cvetovi ne budu previše napadni */
+animation:moveBg 35s linear infinite; /* Sporija, nežnija animacija */
 }
 
-/* Gradijent koji omekšava ivice senke */
-.bg-overlay {
-    position: absolute;
-    inset: 0;
-    background: radial-gradient(circle at 30% 30%, transparent 0%, #0e0e0e 85%);
+.bg::after{
+animation-direction:reverse;
+opacity:0.12;
+filter:blur(15px) grayscale(30%); /* Drugi sloj za dubinu */
 }
 
-@keyframes sway {
-    0%, 100% { transform: rotate(-1deg) scale(1.05); }
-    50% { transform: rotate(1.5deg) scale(1); }
+/* Animacija njištanja/pomeranja pozadine na vetru */
+@keyframes moveBg{
+0%{transform:translate(0,0) rotate(0deg);}
+25%{transform:translate(-5%, -5%) rotate(0.5deg);}
+50%{transform:translate(-10%, -10%) rotate(1deg);}
+75%{transform:translate(-5%, -5%) rotate(0.5deg);}
+100%{transform:translate(0,0) rotate(0deg);}
 }
 
 /* ================= SECTIONS ================= */
@@ -65,7 +65,7 @@ text-align:center;
 max-width:900px;
 margin:auto;
 position: relative;
-z-index: 1;
+z-index: 1; /* Osigurava da je tekst iznad pozadine */
 }
 
 /* ================= HERO ================= */
@@ -92,11 +92,11 @@ margin-top:40px;
 }
 
 .time-item{
-border:1px solid rgba(255,255,255,.1);
+border:1px solid rgba(255,255,255,.15); /* Malo vidljivije ivice */
 padding:20px;
 border-radius:10px;
-backdrop-filter:blur(8px);
-background: rgba(255,255,255,0.02);
+backdrop-filter:blur(10px); /* Jači blur efekat za staklo */
+background: rgba(255,255,255,0.03); /* Suptilna bela nijansa */
 }
 
 /* ================= GALLERY ================= */
@@ -137,7 +137,7 @@ width:100%;
 height:350px;
 border:0;
 border-radius:10px;
-filter: invert(90%) hue-rotate(180deg); /* Tamna mapa da se slaže uz stil */
+filter: invert(90%) hue-rotate(180deg); /* Tamna mapa */
 }
 
 /* ================= RSVP ================= */
@@ -180,10 +180,7 @@ transition: 0.3s;
 
 <body>
 
-<div class="bg">
-    <div class="flower-shadow"></div>
-    <div class="bg-overlay"></div>
-</div>
+<div class="bg"></div>
 
 <section class="hero">
 <div class="monogram">A M</div>
@@ -222,7 +219,7 @@ Ove godine želi da proslavi rođendan sa najbližima i napravi veče za pamćen
 
 <section>
 <h2>Lokacija</h2>
-<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2830.2!2d20.45!3d44.81!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zNDTCsDQ4JzM2LjAiTiAyMMKwMjcnMDAuMCJF!5e0!3m2!1ssr!2srs!4v1625000000000!5m2!1ssr!2srs"></iframe>
+<iframe src="http://googleusercontent.com/maps.google.com/2"></iframe>
 </section>
 
 <section>
