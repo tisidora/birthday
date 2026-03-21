@@ -420,6 +420,39 @@ iframe {
   line-height: 1;
 }
 
+/* Delete button on each card */
+.mc-delete {
+  position: absolute;
+  bottom: 12px; right: 14px;
+  background: none; border: none;
+  font-family: 'Jost', sans-serif;
+  font-weight: 200; font-size: 9px;
+  letter-spacing: 3px; text-transform: uppercase;
+  color: rgba(26,22,16,0.2);
+  cursor: pointer;
+  padding: 2px 0;
+  transition: color 0.3s;
+}
+.mc-delete:hover { color: #b94040; }
+
+/* Admin clear-all button */
+.msg-admin {
+  margin-top: 16px;
+  text-align: center;
+}
+.msg-clear-all {
+  background: none; border: none;
+  font-family: 'Jost', sans-serif;
+  font-weight: 200; font-size: 9px;
+  letter-spacing: 4px; text-transform: uppercase;
+  color: rgba(26,22,16,0.18);
+  cursor: pointer;
+  padding: 4px 0;
+  border-bottom: 1px solid transparent;
+  transition: color 0.3s, border-color 0.3s;
+}
+.msg-clear-all:hover { color: #b94040; border-bottom-color: #b94040; }
+
 /* Empty state */
 .message-empty {
   font-family: 'Cormorant Garamond', serif;
@@ -684,9 +717,10 @@ iframe {
       <h2>Galerija</h2>
     </div>
     <div class="gallery reveal">
-      <img src="https://images.unsplash.com/photo-1530103043960-ef38714abb15?auto=format&fit=crop&w=600">
-      <img src="https://images.unsplash.com/photo-1464366400600-7168b8af9bc3?auto=format&fit=crop&w=400">
-      <img src="https://images.unsplash.com/photo-1519225421980-715cb0215aed?auto=format&fit=crop&w=400">
+      <!-- Feminine, soft, botanical — blush roses, champagne, peonies -->
+      <img src="https://images.unsplash.com/photo-1487530811015-780780169dc5?auto=format&fit=crop&w=600&q=80">
+      <img src="https://images.unsplash.com/photo-1548199569-2e6679bef9d4?auto=format&fit=crop&w=400&q=80">
+      <img src="https://images.unsplash.com/photo-1518895949257-7621c3c786d7?auto=format&fit=crop&w=400&q=80">
     </div>
   </section>
 
@@ -741,7 +775,10 @@ iframe {
 
     <!-- Wall of messages -->
     <div class="message-wall reveal" id="messageWall">
-      <p class="message-empty" id="msgEmpty">Budi prvi koji će ostaviti poruku ✦</p>
+      <p class="message-empty" id="msgEmpty">Budi prvi koji ostavi poruku ✦</p>
+    </div>
+    <div class="msg-admin" id="msgAdmin" style="display:none">
+      <button class="msg-clear-all" id="msgClearAll">Obriši sve poruke</button>
     </div>
 
     <!-- Message form -->
@@ -782,103 +819,31 @@ document.getElementById('stepDown').addEventListener('click', () => {
   guestVal.textContent = guestCount;
 });
 
-/* Show/hide guest count based on pill selection */
 document.querySelectorAll('input[name="dolazak"]').forEach(radio => {
   radio.addEventListener('change', () => {
     if (radio.value === 'Dolazim') {
       guestWrap.classList.add('open');
-      guestCount = 1;
-      guestVal.textContent = '1';
+      guestCount = 1; guestVal.textContent = '1';
     } else {
       guestWrap.classList.remove('open');
     }
   });
 });
 
-/* ── PORUKA SLAVLJENICI ── */
-const messages = [];
-
-function renderMessages() {
-  const wall  = document.getElementById('messageWall');
-  const empty = document.getElementById('msgEmpty');
-
-  // Remove old cards (keep empty state el)
-  wall.querySelectorAll('.message-card').forEach(c => c.remove());
-
-  if (messages.length === 0) {
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-
-  // Render newest first, staggered animation
-  [...messages].reverse().forEach((m, i) => {
-    const card = document.createElement('div');
-    card.className = 'message-card';
-    card.style.animationDelay = `${i * 0.08}s`;
-    card.innerHTML = `
-      <span class="mc-ornament">"</span>
-      <p class="mc-quote">${escHtml(m.text)}</p>
-      <p class="mc-author">${escHtml(m.author)}</p>
-    `;
-    wall.appendChild(card);
-  });
-}
-
-function escHtml(str) {
-  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
-}
-
-document.getElementById('msgSubmit').addEventListener('click', () => {
-  const author = document.getElementById('msgAuthor').value.trim();
-  const text   = document.getElementById('msgText').value.trim();
-  if (!author || !text) {
-    // Shake hint
-    ['msgAuthor','msgText'].forEach(id => {
-      const el = document.getElementById(id);
-      if (!el.value.trim()) {
-        el.style.borderBottomColor = '#c0392b';
-        setTimeout(() => el.style.borderBottomColor = '', 1200);
-      }
-    });
-    return;
-  }
-
-  messages.push({ author, text });
-  document.getElementById('msgAuthor').value = '';
-  document.getElementById('msgText').value   = '';
-  renderMessages();
-
-  // Scroll wall to top to show new message
-  const wall = document.getElementById('messageWall');
-  wall.scrollTo({ top: 0, behavior: 'smooth' });
-});
-
-renderMessages();
+/* ── RSVP submit ── */
 document.getElementById('rsvpForm').addEventListener('submit', function(e) {
   e.preventDefault();
   const name   = document.getElementById('rsvpName').value.trim();
   const choice = document.querySelector('input[name="dolazak"]:checked');
   if (!name || !choice) return;
-
-  const dolazi  = choice.value === 'Dolazim';
-  const guests  = dolazi ? guestCount : 0;
-
-  // Build a friendly confirmation message
-  let msg = '';
-  if (dolazi) {
-    msg = guests === 1
-      ? 'Hvala, vidimo se! ✦'
-      : `Hvala! Čekamo vas ${guests}. ✦`;
-  } else {
-    msg = 'Žao nam je što nećeš doći. ✦';
-  }
-
+  const dolazi = choice.value === 'Dolazim';
+  const guests = dolazi ? guestCount : 0;
+  let msg = dolazi
+    ? (guests === 1 ? 'Hvala, vidimo se! ✦' : `Hvala! Čekamo vas ${guests}. ✦`)
+    : 'Žao nam je što nećeš doći. ✦';
   const form = document.getElementById('rsvpForm');
   form.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
-  form.style.opacity    = '0';
-  form.style.transform  = 'translateY(10px)';
-
+  form.style.opacity = '0'; form.style.transform = 'translateY(10px)';
   setTimeout(() => {
     form.style.display = 'none';
     const successEl = document.getElementById('rsvpSuccess');
@@ -887,10 +852,127 @@ document.getElementById('rsvpForm').addEventListener('submit', function(e) {
     requestAnimationFrame(() => requestAnimationFrame(() => successEl.classList.add('visible')));
   }, 500);
 });
-</script>
-</body>
-</html>
 
-</div>
+/* ══════════════════════════════════════
+   PORUKE — localStorage perzistentne
+══════════════════════════════════════ */
+const LS_KEY = 'ana_birthday_messages';
+
+function loadMessages() {
+  try { return JSON.parse(localStorage.getItem(LS_KEY)) || []; }
+  catch { return []; }
+}
+function saveMessages(msgs) {
+  try { localStorage.setItem(LS_KEY, JSON.stringify(msgs)); } catch {}
+}
+
+function escHtml(str) {
+  return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function deleteMessage(id) {
+  let msgs = loadMessages();
+  msgs = msgs.filter(m => m.id !== id);
+  saveMessages(msgs);
+  renderMessages(false);
+}
+
+function renderMessages(animateAll = true) {
+  const wall    = document.getElementById('messageWall');
+  const empty   = document.getElementById('msgEmpty');
+  const admin   = document.getElementById('msgAdmin');
+  const msgs    = loadMessages();
+
+  wall.querySelectorAll('.message-card').forEach(c => c.remove());
+
+  if (msgs.length === 0) {
+    empty.style.display = 'block';
+    admin.style.display = 'none';
+    return;
+  }
+  empty.style.display = 'none';
+  admin.style.display = 'block';
+
+  // Newest first
+  [...msgs].reverse().forEach((m, i) => {
+    const card = document.createElement('div');
+    card.className = 'message-card';
+    if (animateAll) card.style.animationDelay = `${i * 0.08}s`;
+    card.innerHTML = `
+      <span class="mc-ornament">"</span>
+      <p class="mc-quote">${escHtml(m.text)}</p>
+      <p class="mc-author">${escHtml(m.author)}</p>
+      <button class="mc-delete" data-id="${m.id}">Obriši</button>
+    `;
+    wall.appendChild(card);
+  });
+
+  // Attach delete handlers
+  wall.querySelectorAll('.mc-delete').forEach(btn => {
+    btn.addEventListener('click', () => {
+      const card = btn.closest('.message-card');
+      card.style.transition = 'opacity 0.35s ease, transform 0.35s ease';
+      card.style.opacity = '0';
+      card.style.transform = 'translateX(12px)';
+      setTimeout(() => deleteMessage(btn.dataset.id), 360);
+    });
+  });
+}
+
+/* Submit new message */
+document.getElementById('msgSubmit').addEventListener('click', () => {
+  const author = document.getElementById('msgAuthor').value.trim();
+  const text   = document.getElementById('msgText').value.trim();
+
+  if (!author || !text) {
+    ['msgAuthor','msgText'].forEach(id => {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) {
+        el.style.borderBottomColor = '#b94040';
+        setTimeout(() => el.style.borderBottomColor = '', 1200);
+      }
+    });
+    return;
+  }
+
+  const msgs = loadMessages();
+  msgs.push({
+    id: Date.now().toString(),
+    author,
+    text,
+    ts: new Date().toISOString()
+  });
+  saveMessages(msgs);
+
+  document.getElementById('msgAuthor').value = '';
+  document.getElementById('msgText').value   = '';
+  renderMessages(false);
+
+  // Animate newest card (first in wall after re-render)
+  const first = document.querySelector('.message-card');
+  if (first) {
+    first.style.animation = 'none';
+    first.style.opacity = '0';
+    first.style.transform = 'translateY(14px)';
+    requestAnimationFrame(() => {
+      first.style.transition = 'opacity 0.5s ease, transform 0.5s cubic-bezier(0.22,1,0.36,1)';
+      first.style.opacity = '1';
+      first.style.transform = 'translateY(0)';
+    });
+  }
+
+  document.getElementById('messageWall').scrollTo({ top: 0, behavior: 'smooth' });
+});
+
+/* Clear all */
+document.getElementById('msgClearAll').addEventListener('click', () => {
+  if (!confirm('Obrisati sve poruke?')) return;
+  saveMessages([]);
+  renderMessages(false);
+});
+
+/* Init */
+renderMessages();
+</script>
 </body>
 </html>
